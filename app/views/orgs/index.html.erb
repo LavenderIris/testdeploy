@@ -1,0 +1,59 @@
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<div class = "container">
+    <h1 class="inline">Hi <%=current_user.firstname %> <%=current_user.lastname %>! </h1>
+  
+    <a href="/logout" data-method="post" class="a">Logout</a>
+    <h4>Here are some organizations you may join</h4><br>
+</div>
+
+<div class="container">
+    <div class="row">
+    <div class ="col-sm-6">
+        <!-- list all events -->
+        <% @orgs.each do |org|  %>
+            <a href="/groups/<%=org.id%>" class="inline"><%= org.name %></a>   
+            <% if org.user == current_user %>
+            <form action="/delete/<%=org.id%>" method="post" class="inline">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                <input type="hidden" name="_method" value="delete">
+                <input type="submit" value="Delete ">
+            </form>
+            <% end %>
+
+            <p>Members: <%= org.members.count%></p>
+            <p><%= org.desc %></p>
+            <br>
+        <% end %>
+    </div>
+
+    <div class ="col-sm-6">
+        <fieldset class="scheduler-border">
+            <h3>Create a new organization</h3>
+            <form action="/orgs/create" method="post">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                Org Name: <input type="text" name="event[name]"> <br>
+                <p class="formfield">
+                    <label for="textarea"> Description: </label></label>
+                    <textarea name="event[desc]" id="textarea" cols="30" rows="5"></textarea>
+                </p>
+                <input class="a" type="submit" value="Create">
+            </form>
+        </fieldset>
+    </div>
+
+</div>
+<!-- end of row -->
+
+    <div class="m-l">
+        <% if flash[:errors] %>
+            <% flash[:errors].each do |error| %>
+                <%=error%><br>
+            <% end %>
+        <% end%>
+    </div>
+
+</div>

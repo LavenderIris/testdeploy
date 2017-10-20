@@ -1,0 +1,53 @@
+<head>
+    <title>Groups</title>
+</head>
+    
+<style>
+    p {
+        margin: 0px 0px 0px 0px;
+    }
+
+    .m {
+        margin-left: 2%;
+    }
+
+</style>
+
+<div class = "container">
+    <a href="/groups" class= 'a'>Dashboard</a>
+    <a href="/logout" data-method="post" class= 'spacing'>Logout</a>
+</div>
+
+<div class = "container">
+    <h2 class="inline"><%= @org.name %> </h2>
+    <!-- button creation to join/leave group -->
+    <% if @isMember.size > 0 %>
+        <form action="/leave/<%= @org.id%>" method="post" class="inline">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="submit" value="Leave Group">
+        </form>
+    <% else %>
+        <form action="/join/<%= @org.id%>" method="post" class="inline">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="submit" value="Join Group">
+        </form>
+    <% end %>
+
+    <p><%= @org.desc %></p>
+
+    <h4>Created By: 
+        <% if current_user == @org.user %>
+            YOU <br>
+        <% else %>
+            <%= @org.user.firstname %>
+        <% end %>
+    </h4>
+
+    <p>Members:</p>
+    <% if @org.members.size > 0 %>
+        <% @org.members.each do |member| %>
+            <p class="m"><%= member.user.firstname %> <%= member.user.lastname %></p>
+        <% end %>
+    <% end %>
+
+</div>
