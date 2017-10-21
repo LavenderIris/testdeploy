@@ -1,4 +1,5 @@
 class OrgsController < ApplicationController
+
   def index
     @orgs = Org.all
 
@@ -24,7 +25,12 @@ class OrgsController < ApplicationController
   end
 
   def join
-    Member.create(user:current_user, org: Org.find(params[:id]))
+    m = Member.find_by_user_id_and_org_id(current_user.id, params[:id])
+    if m.nil?
+      Member.create(user:current_user, org: Org.find(params[:id]))
+    else 
+      # do nothing
+    end
     redirect_to '/groups/'+params[:id]
   end
 
